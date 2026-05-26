@@ -1,0 +1,98 @@
+{
+    "layer": "top",
+    "position": "top",
+    "margin-top": 5,
+    "margin-left": 10,
+    "margin-right": 10,
+    "height": 30,
+    "spacing": 4,
+    
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": [],
+    "modules-right": ["tray", "hyprland/language", "network", "pulseaudio", "battery", "clock"],
+    
+"hyprland/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "sort-by-number": true,
+    "persistent-workspaces": {
+        "*": 7 
+    },
+    "show-special": true
+},
+
+"hyprland/window": {
+    "format": "{}",
+    "max-length": 35,
+    "separate-outputs": true
+},
+    
+"clock": {
+   "format": "{:%a, %d %b  %H:%M}",
+   "on-click": "kitty --class float_calcure -e calcure",
+   "tooltip": false 
+},
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    },
+    
+    "network": {
+        "format-wifi": "󰤨 ",
+        "format-ethernet": "󰈀 ",
+        "format-disconnected": "󰤭  ",
+        "tooltip-format": "Настройки сети",
+        "on-click": "networkmanager_dmenu",
+        "on-click-right": "networkmanager_dmenu",
+        "interval": 5
+    },
+
+    "cpu": {
+        "format": "  {usage}%",
+        "interval": 2
+    },
+    
+    "memory": {
+        "format": "  {percentage}%",
+        "interval": 5
+    },
+    
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "󰝟  muted",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
+    },
+ 
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "custom/vpn": {
+        "format": "󰖂 ",
+        "exec": "ip link show Estonia > /dev/null 2>&1 && echo '{\"class\": \"connected\", \"text\": \"󰖂 \"}' || echo '{\"class\": \"disconnected\", \"text\": \"󰖂 \"}'",
+        "return-type": "json",
+        "interval": 2,
+        "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
+        "tooltip": false
+    },
+
+    "hyprland/language": {
+    "format": "  {}",
+    "format-en": "EN",
+    "format-ru": "RU",
+    "keyboard-name": "apple-spi-keyboard"
+}
+}

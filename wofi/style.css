@@ -1,0 +1,42 @@
+window {
+    margin: 0px;
+    border: 2px solid rgba(137, 180, 250, 0.8); /* Наш синий цвет из активной рамки */
+    background-color: rgba(30, 30, 46, 0.9);    /* Темный полупрозрачный фон */
+    border-radius: 15px;
+    font-family: "JetBrainsMono Nerd Font", "sans-serif";
+    font-size: 16px;
+}
+
+#outer-box {
+    margin: 10px;
+    padding: 10px;
+}
+
+#input {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    color: #cdd6f4;
+    background-color: rgba(69, 71, 90, 0.5);
+    border-radius: 10px;
+}
+
+#inner-box {
+    margin: 5px;
+}
+
+#entry:selected {
+    background-color: rgba(203, 166, 247, 0.8); /* Фиолетовый акцент при выборе */
+    border-radius: 10px;
+    outline: none;
+}
+
+#text {
+    margin: 5px;
+    color: #cdd6f4;
+}
+
+#text:selected {
+    color: #11111b; /* Темный текст на светлом фоне при выборе */
+    font-weight: bold;
+}

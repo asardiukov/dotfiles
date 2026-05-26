@@ -1,0 +1,77 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 14px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: #cdd6f4;
+}
+
+/* Общий стиль для всех "островков" */
+#workspaces, #window, #clock, #tray, #network, #cpu, #memory, #pulseaudio, #battery, #custom-vpn, #language {
+    background-color: rgba(30, 30, 46, 0.85); /* Полупрозрачный темный фон */
+    padding: 0 14px;
+    margin: 0 4px;
+    border-radius: 12px;
+}
+
+/* --- Настройки Рабочих столов (Единый стиль) --- */
+#workspaces button {
+    color: #a6adc8; /* Цвет неактивных столов */
+    padding: 0 6px;
+    margin: 0 2px;
+    box-shadow: none;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+/* Столы с открытыми окнами (если Waybar это поддерживает) */
+#workspaces button:not(.empty) {
+    color: #f14ee9; /* Чуть ярче для занятых столов */
+}
+
+/* Активный стол */
+#workspaces button.active {
+    color: #ffffff; /* Синий акцент */
+    font-weight: bold;
+    background: rgba(137, 180, 250, 0.2); /* Легкая синяя подсветка фона */
+    border-radius: 8px;
+}
+
+#workspaces button:hover {
+    background: rgba(137, 180, 250, 0.4);
+    border-radius: 8px;
+    color: #cdd6f4;
+}
+
+/* --- Окно (убираем фон, если пусто) --- */
+window#waybar.empty #window {
+    background-color: transparent;
+}
+
+/* --- Батарея --- */
+#battery.charging { color: #a6e3a1; }
+#battery.warning:not(.charging) { color: #f9e2af; }
+#battery.critical:not(.charging) { color: #f38ba8; animation: blink 2s linear infinite; }
+
+/* --- Язык и VPN --- */
+#language {
+    color: #f5c2e7; /* Розоватый акцент для языка */
+    font-weight: bold;
+}
+
+#custom-vpn {
+    color: #a6adc8;
+}
+
+#custom-vpn.connected {
+    color: #a6e3a1;
+}
+
+@keyframes blink {
+    to { background-color: #f38ba8; color: #1e1e2e; }
+}
