@@ -1,0 +1,294 @@
+// === КОНФИГУРАЦИЯ NIRI ===
+// Символ `/-` перед узлом (строкой или блоком) полностью его отключает (комментирует).
+// Формат конфигурации: KDL (https://kdl.dev)
+
+// ==========================================
+// ⌨️ УСТРОЙСТВА ВВОДА
+// ==========================================
+input {
+    keyboard {
+        xkb {
+            // Настройки раскладки. Если оставить пустым, Niri возьмет системные.
+            // Пример использования:
+             layout "us,ru"
+             options "grp:caps_toggle,altwin:swap_alt_win"
+        }
+        numlock // Включает NumLock при старте
+    }
+
+    touchpad {
+        tap             // Включает клик легким касанием
+        natural-scroll  // Естественная прокрутка (как на Макбуке)
+        // accel-speed 0.2
+    }
+
+    mouse {
+        // natural-scroll
+        // accel-speed 0.2
+    }
+
+    // Раскомментируйте, чтобы фокус переключался туда, куда вы навели мышь
+     focus-follows-mouse max-scroll-amount="0%" 
+}
+
+// ==========================================
+// 🖥️ МОНИТОРЫ (Outputs)
+// ==========================================
+// Узнать точное имя монитора можно командой `niri msg outputs`.
+// Встроенный экран ноутбука обычно называется "eDP-1".
+/-output "eDP-1" {
+    // mode "1920x1080@120.030" // Принудительное разрешение и частота
+    scale 2                     // Масштабирование (например, для Retina экранов)
+    transform "normal"          // Поворот экрана (normal, 90, 180, 270)
+    position x=1280 y=0         // Координаты (полезно при двух мониторах)
+}
+
+// ==========================================
+// 🎨 ВНЕШНИЙ ВИД (Layout)
+// ==========================================
+layout {
+    gaps 16 // Отступы между окнами
+
+    // Центрировать ли колонку при фокусе: "never" (нет), "always" (да), "on-overflow" (если не влезает)
+    center-focused-column "never"
+
+    // Пресеты ширины окон (переключаются по горячей клавише Mod+R)
+    preset-column-widths {
+        proportion 0.33333 // Треть экрана
+        proportion 0.5     // Половина экрана
+        proportion 0.66667 // Две трети экрана
+    }
+
+    default-column-width { proportion 0.5; } // Ширина новых окон по умолчанию
+
+    // --- Рамка фокуса (вокруг активного окна) ---
+    focus-ring {
+        // off // Раскомментируйте, чтобы отключить
+        width 4
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+        
+        // Пример градиентной рамки:
+        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+    }
+
+    // --- Постоянная рамка (вокруг всех окон) ---
+    border {
+        off // По умолчанию выключена
+        width 4
+        active-color "#ffc87f"
+        inactive-color "#505050"
+        urgent-color "#9b0000" // Цвет для окон, требующих внимания
+    }
+
+    // --- Тени ---
+    shadow {
+        // on // Раскомментируйте для включения
+        softness 30
+        spread 5
+        offset x=0 y=5
+        color "#0007"
+    }
+
+    // Зарезервированное место по краям экрана (например, для панелей вроде Waybar)
+    struts {
+        // left 64
+        // right 64
+        // top 64
+        // bottom 64
+    }
+}
+
+// ==========================================
+// 🚀 АВТОЗАПУСК И СИСТЕМА
+// ==========================================
+spawn-at-startup "waybar"
+// spawn-sh-at-startup "ваш_скрипт.sh" // Для сложных команд с пайпами
+
+// Просить приложения отключать свои собственные рамки (рекомендуется)
+// prefer-no-csd
+
+// Куда сохранять скриншоты
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+animations {
+    // off // Отключить все анимации полностью
+    // slowdown 3.0 // Замедлить анимации
+}
+
+// ==========================================
+// 📜 ПРАВИЛА ОКОН (Window Rules)
+// ==========================================
+// Исправление бага ширины для WezTerm
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Открывать видео "Картинка в картинке" (Firefox) как плавающее окно
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Пример: Принудительное скругление углов у всех окон
+/-window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+// ==========================================
+// 🎮 ГОРЯЧИЕ КЛАВИШИ (Binds)
+// ==========================================
+// "Mod" — это клавиша Super (Win / Cmd).
+binds {
+    // --- Система и Приложения ---
+    Mod+Shift+Slash { show-hotkey-overlay; } // Шпаргалка по всем хоткеям
+    Mod+T           { spawn "kitty"; }       // Терминал
+    Mod+D           { spawn "fuzzel"; }      // Меню запуска приложений
+    Super+Alt+L     { spawn "swaylock"; }    // Блокировка экрана
+    Mod+Shift+E     { quit; }                // Меню выхода из Niri
+    Ctrl+Alt+Delete { quit; }
+    Mod+Shift+P     { power-off-monitors; }  // Погасить экраны
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; } // Сброс перехвата клавиатуры
+
+    // --- Медиа и Громкость ---
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+
+    // --- Окна: Базовое управление ---
+    Mod+Q { close-window; }                 // Закрыть окно
+    Mod+O repeat=false { toggle-overview; } // Режим обзора всех окон
+
+    // --- Окна: Фокус (Стрелки / Vim-клавиши) ---
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    Mod+H     { focus-column-left; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+L     { focus-column-right; }
+
+    // --- Окна: Перемещение (Стрелки / Vim-клавиши) ---
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Ctrl+Right { move-column-right; }
+    Mod+Ctrl+H     { move-column-left; }
+    Mod+Ctrl+J     { move-window-down; }
+    Mod+Ctrl+K     { move-window-up; }
+    Mod+Ctrl+L     { move-column-right; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End  { move-column-to-last; }
+
+    // --- Мониторы: Фокус и Перемещение ---
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Down  { focus-monitor-down; }
+    Mod+Shift+Up    { focus-monitor-up; }
+    Mod+Shift+Right { focus-monitor-right; }
+    Mod+Shift+H     { focus-monitor-left; }
+    Mod+Shift+J     { focus-monitor-down; }
+    Mod+Shift+K     { focus-monitor-up; }
+    Mod+Shift+L     { focus-monitor-right; }
+
+    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
+    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
+    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
+    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+
+    // --- Рабочие столы (Workspaces) ---
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+    Mod+Ctrl+U         { move-column-to-workspace-down; }
+    Mod+Ctrl+I         { move-column-to-workspace-up; }
+    Mod+Shift+Page_Down { move-workspace-down; }
+    Mod+Shift+Page_Up   { move-workspace-up; }
+    Mod+Shift+U         { move-workspace-down; }
+    Mod+Shift+I         { move-workspace-up; }
+
+    // Навигация по рабочим столам цифрами
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // --- Мышь и Тачпад (Управление свитками) ---
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollRight     { focus-column-right; }
+    Mod+WheelScrollLeft      { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+    Mod+Shift+WheelScrollDown      { focus-column-right; }
+    Mod+Shift+WheelScrollUp        { focus-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    // --- Окна: Группировка и Вкладки ---
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    // --- Окна: Размеры и Режимы ---
+    Mod+R       { switch-preset-column-width; }
+    Mod+Shift+R { switch-preset-window-height; }
+    Mod+Ctrl+R  { reset-window-height; }
+    Mod+F       { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+Ctrl+F  { expand-column-to-available-width; }
+    Mod+C       { center-column; }
+    Mod+Ctrl+C  { center-visible-columns; }
+
+    // Точная подгонка размеров
+    Mod+Minus       { set-column-width "-10%"; }
+    Mod+Equal       { set-column-width "+10%"; }
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Плавающие окна и Вкладки
+    Mod+V       { toggle-window-floating; }
+    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+W       { toggle-column-tabbed-display; }
+
+    // --- Скриншоты ---
+    Print      { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print  { screenshot-window; }
+}
