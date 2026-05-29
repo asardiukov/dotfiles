@@ -1,0 +1,86 @@
+[opener]
+# Терминальный редактор (ждем закрытия)
+edit = [
+    { run = 'nvim "$@"', block = true, desc = "Neovim" },
+]
+# Офисный пакет (в фоне)
+office = [
+    { run = 'libreoffice "$@"', detach = true, desc = "LibreOffice" },
+]
+# Просмотр документов и книг (в фоне)
+pdf = [
+    { run = 'zathura "$@"', detach = true, desc = "Zathura" },
+]
+# Просмотр изображений (в фоне)
+image = [
+    { run = 'imv "$@"', detach = true, desc = "imv" },
+]
+# Медиаплеер (в фоне)
+video = [
+    { run = 'mpv "$@"', detach = true, desc = "mpv" },
+]
+# Распаковка архивов (ждем завершения в терминале)
+extract = [
+    { run = 'ouch de "$@"', block = true, desc = "Extract with ouch" },
+]
+
+# --- ДОБАВЛЕНО: Открытие через систему ---
+system = [
+    { run = 'xdg-open "$@"', desc = "Open via OS" },
+]
+
+[open]
+rules = [
+    # --- ПРОГРАММИРОВАНИЕ И ТЕКСТ ---
+     # Самое первое правило — по расширению (железобетонное)
+    { name = "*.js", use = "edit" }, 
+    # Общее правило для всех текстовых файлов
+    { mime = "text/*", use = "edit" },
+    # Явное указание для кода (на случай, если MIME не определен)
+    { name = "*.{py,js,ts,jsx,tsx,c,cpp,h,hpp,rs,go,lua,sh,php,rb,java}", use = "edit" },
+    # Конфиги и разметка
+    { name = "*.{json,toml,yaml,yml,html,css,md,txt,conf,ini}", use = "edit" },
+
+    # --- ДОКУМЕНТЫ И КНИГИ ---
+    # PDF и DJVU
+    { mime = "application/pdf", use = "pdf" },
+    { name = "*.djvu", use = "pdf" },
+    # Электронные книги
+    { name = "*.{epub,fb2,mobi,cbr,cbz}", use = "pdf" },
+    # Офисные форматы (Word, Excel, PowerPoint)
+    { mime = "application/{vnd.ms-excel,msword,vnd.openxmlformats-officedocument.*,vnd.oasis.opendocument.*}", use = "office" },
+
+    # --- МУЛЬТИМЕДИА ---
+    # Все изображения
+    { mime = "image/*", use = "image" },
+    { name = "*.{svg,webp,bmp,ico}", use = "image" },
+    
+    # Все видео
+    { mime = "video/*", use = "video" },
+    { name = "*.{mkv,mp4,avi,mov,webm,flv,ts}", use = "video" },
+    
+    # Вся музыка
+    { mime = "audio/*", use = "video" },
+    { name = "*.{mp3,flac,wav,ogg,m4a}", use = "video" },
+
+    # --- АРХИВЫ ---
+    { mime = "application/{zip,x-tar,x-bzip2,x-gzip,x-rar,x-7z-compressed}", use = "extract" },
+    { name = "*.{zip,tar,gz,7z,rar,bz2,xz}", use = "extract" },
+
+    # --- ДОБАВЛЕНО: ФОЛБЭК ДЛЯ ВСЕХ ОСТАЛЬНЫХ ФАЙЛОВ ---
+    { mime = "*", use = "system" },
+    { name = "*", use = "system" }
+]
+[manager]
+ratio          = [ 1, 4, 3 ]
+sort_by        = "alphabetical"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+linemode       = "size"
+show_hidden    = true
+show_symlink   = true
+
+# Включаем те самые рамки!
+[manager.borders]
+active = "all"

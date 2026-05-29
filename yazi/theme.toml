@@ -1,0 +1,57 @@
+# === ТЕМА YAZI: CYBER-NIX ===
+
+[manager]
+# Настройка рамок (как в вашем TUI-скрипте)
+border_symbol = "│"
+border_style  = { fg = "#89b4fa" }
+
+# Цвета папок и файлов
+cwd = { fg = "#cba6f7", bold = true, italic = true } # Пурпурный путь сверху
+hovered         = { fg = "#1e1e2e", bg = "#89b4fa", bold = true } # Выделенный элемент (синий фон, темный текст)
+preview_hovered = { underline = true }
+
+# Поиск
+find_keyword    = { fg = "#f9e2af", bold = true, italic = true } # Желтый для совпадений
+find_position   = { fg = "#f5c2e7", bg = "reset", italic = true } 
+
+[status]
+# Скругленные края для нижней панели статуса
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#45475a", bg = "#1e1e2e" }
+
+# Цвета режимов (Normal, Select, Unset)
+mode_normal = { fg = "#1e1e2e", bg = "#89b4fa", bold = true } # Синий
+mode_select = { fg = "#1e1e2e", bg = "#a6e3a1", bold = true } # Зеленый
+mode_unset  = { fg = "#1e1e2e", bg = "#f38ba8", bold = true } # Красный
+
+# Информация о файлах справа внизу
+permissions_t = { fg = "#89b4fa" }
+permissions_r = { fg = "#f9e2af" }
+permissions_w = { fg = "#f38ba8" }
+permissions_x = { fg = "#a6e3a1" }
+permissions_s = { fg = "#45475a" }
+
+[filetype]
+# Умная подсветка файлов (чтобы всё читалось с первого взгляда)
+rules = [
+    # Папки
+    { name = "*/", fg = "#89b4fa", bold = true },
+    
+    # Ваши системные скрипты и конфиги
+    { name = "*.nix", fg = "#89b4fa", italic = true },
+    { name = "*.sh", fg = "#a6e3a1", bold = true },
+    { name = "*.conf", fg = "#bac2de" },
+    { name = "*.toml", fg = "#bac2de" },
+    { name = "config", fg = "#bac2de" },
+    
+    # Медиа
+    { mime = "image/*", fg = "#f5c2e7" },
+    { mime = "video/*", fg = "#f9e2af" },
+    { mime = "audio/*", fg = "#f9e2af" },
+    
+    # Архивы
+    { mime = "application/zip", fg = "#f38ba8" },
+    { mime = "application/gzip", fg = "#f38ba8" },
+    { mime = "application/x-tar", fg = "#f38ba8" },
+]
