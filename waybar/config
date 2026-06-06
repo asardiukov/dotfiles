@@ -19,7 +19,7 @@
     "persistent-workspaces": {
         "*": 7 
     },
-    "show-special": true
+    "show-special": false
 },
 
 "hyprland/window": {
@@ -61,7 +61,7 @@
     
     "pulseaudio": {
         "format": "{icon}  {volume}%",
-        "format-muted": "󰝟  muted",
+        "format-muted": "󰝟 ",
         "format-icons": {
             "default": ["󰕿", "󰖀", "󰕾"]
         },
@@ -80,19 +80,26 @@
         "format-icons": ["", "", "", "", ""]
     },
 
-    "custom/vpn": {
-        "format": "󰖂 ",
-        "exec": "ip link show Estonia > /dev/null 2>&1 && echo '{\"class\": \"connected\", \"text\": \"󰖂 \"}' || echo '{\"class\": \"disconnected\", \"text\": \"󰖂 \"}'",
-        "return-type": "json",
-        "interval": 2,
-        "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
-        "tooltip": false
-    },
-
     "hyprland/language": {
     "format": "  {}",
     "format-en": "EN",
     "format-ru": "RU",
-    "keyboard-name": "apple-spi-keyboard"
+    },
+// Модуль ползунка яркости
+    "backlight/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+
+    // Модуль ползунка громкости (добавил для комплекта)
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    }
+
+
+
 }
-}
+

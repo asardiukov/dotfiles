@@ -1,0 +1,27 @@
+# Глобальные настройки
+font=JetBrainsMono Nerd Font 11
+background-color=#1e1e2ee6
+text-color=#cdd6f4
+border-color=#89b4fa
+border-size=2
+border-radius=12
+margin=20
+padding=15
+default-timeout=5000
+
+# Позиция на экране (top-right - классика)
+anchor=top-right
+sort=-time
+
+# Настройки иконок
+max-icon-size=48
+
+# Настройки группировки (если пришло много уведомлений подряд)
+[grouped]
+format=<b>%s</b>\n%b\n<i>(%g уведомлений)</i>
+
+# Критические уведомления (например, садится батарея)
+[urgency=high]
+border-color=#f38ba8
+default-timeout=0
+
