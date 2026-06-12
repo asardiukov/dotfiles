@@ -2,10 +2,10 @@ if status is-interactive
     # Отключаем приветствие при запуске
     set -g fish_greeting
     # Устанавливаем API-ключ DeepSeek
-    set -Ux DEEPSEEK_API_KEY "sk-9bcff5bb90b648c2a1035b0229c8c308"
+    set -Ux DEEPSEEK_API_KEY sk-9bcff5bb90b648c2a1035b0229c8c308
     # Устанавливаем API-ключ DeepSeek
-    set -Ux DEEPSEEK_API_KEY "sk-9bcff5bb90b648c2a1035b0229c8c308"
-    nitch
+    set -Ux DEEPSEEK_API_KEY sk-9bcff5bb90b648c2a1035b0229c8c308
+    fastfetch
     # Инициализация умного перехода по папкам (zoxide)
     zoxide init fish | source
     # Инициализация поиска (fzf)
